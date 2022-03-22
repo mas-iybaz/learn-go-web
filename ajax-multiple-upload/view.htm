@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON AJAX Payload</title>
+    <script src="/static/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            $("#user-form").on("submit", function (e) {
+                e.preventDefault();
+
+                var $self = $(this);
+                var files = $("#image")[0].files;
+                var formData = new FormData();
+
+                for (let index = 0; index < files.length; index++) {
+                    formData.append("files", files[index]);
+                }
+
+                $.ajax({
+                    url: $self.attr("action"),
+                    type: $self.attr("method"),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                }).then(function (res) {
+                    alert(res);
+                    $("#user-form").trigger("reset");
+                }).catch(function (err) {
+                    alert("ERROR: " + err.responseText);
+                });
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <p class="message"></p>
+    <form id="user-form" method="post" action="/save">
+        <input type="file" name="image" id="image" multiple>
+        <br>
+        <button id="btn-submit" type="submit">Upload</button>
+    </form>
+</body>
+
+</html>

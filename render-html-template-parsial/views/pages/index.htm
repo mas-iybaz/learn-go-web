@@ -1,0 +1,45 @@
+{{ define "index" }}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- include template with variable (using ".") -->
+{{ template "header" . }}
+
+<body>
+    <h3>{{ .main.name }}</h3>
+    {{/* Looping */}}
+    <table>
+        <tr>
+            <td>Hobbies</td>
+            <td>:</td>
+            <td>
+                {{ range $i, $hobby := .student.Hobbies }}
+                {{ $hobby }},
+                {{ end }}
+            </td>
+        </tr>
+        <tr>
+            <td>Phone</td>
+            <td>:</td>
+            <td>{{ .student.Contact.Phone }}</td>
+        </tr>
+        <tr>
+            {{ with .student.Contact }}
+            <td>Email</td>
+            <td>:</td>
+            <td>{{ .Email }}</td>
+            {{ end }}
+        </tr>
+        {{/* Branching */}}
+        <tr>
+            <td>Level</td>
+            <td>:</td>
+            <td>{{ if gt .student.Age 9 }} "Gold" {{ else }} "Silver" {{ end }}</td>
+        </tr>
+    </table>
+</body>
+
+</html>
+
+{{ end }}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON AJAX Download FIle</title>
+</head>
+
+<body>
+    <ul id="file-lists"></ul>
+</body>
+
+<script>
+    function PrepareDownload() {
+        var self = this;
+        var fileLists = document.getElementById("file-lists");
+
+        var renderData = function (res) {
+            res.forEach(function (each) {
+                var list = document.createElement("li");
+                var anchor = document.createElement("a");
+
+                list.innerText = "Download ";
+                list.appendChild(anchor);
+                fileLists.appendChild(list);
+
+                anchor.href = "/download?path=" + encodeURI(each.path);
+                anchor.innerText = each.filename;
+                anchor.target = "_blank";
+            });
+        };
+
+        var getAllFileLists = function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/file-lists");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var json = JSON.parse(xhr.responseText);
+                    renderData(json);
+                }
+            };
+            xhr.send();
+        };
+
+        self.init = function () {
+            getAllFileLists();
+        };
+    };
+
+    window.onload = function () {
+        new PrepareDownload().init();
+    }
+</script>
+
+</html>
